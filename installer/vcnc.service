@@ -1,0 +1,29 @@
+;
+;  Copyright (c) 2015-2016 IC Manage, Inc.  All rights reserved.
+;
+;  Influenced by ideas in https://www.digitalocean.com/community/tutorials/how-to-deploy-node-js-applications-using-systemd-and-nginx
+;
+;  Also influenced by
+;  https://rocketeer.be/articles/deploying-node-js-with-systemd/
+;
+;  See also http://www.freedesktop.org/software/systemd/man/systemd.unit.html
+;
+[Unit]
+Description=VelStor vCNC server
+After=vcnc-redis.service
+BindsTo=vcnc-redis.service
+
+[Service]
+Type=simple
+ExecStart=/opt/velstor-vcnc/bin/vcnc
+Restart=always
+StandardOutput=syslog+console
+StandardError=syslog+console
+SyslogIdentifier=velstor-vcnc
+User=root
+Group=root
+Environment=NODE_ENV=production
+Environment=VELSTOR_VCNC_PORT=5500
+
+[Install]
+WantedBy=remote-fs.target

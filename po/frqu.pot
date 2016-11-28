@@ -1,0 +1,285 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Roger March
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: frqu 4.0.1\n"
+"Report-Msgid-Bugs-To: roger@cadroot.com\n"
+"POT-Creation-Date: 2012-10-25 12:56-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/pepsis/peer/cAuth.C:132
+msgid "null authentication, no such command:\t%1%"
+msgstr ""
+
+#: src/pepsis/peer/cDatabase.C:115
+msgid "Unknown address family:\t'%1%'."
+msgstr ""
+
+#: src/pepsis/peer/cRegistrar.C:235 src/pepsis/peer/cPeer.C:172
+msgid "stubz, no such command:\t%1%"
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:60 src/pepsis/peer/cSession.C:70
+msgid "Event back end: select,poll,epoll."
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:61
+msgid "Depth of the listening queue."
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:62 src/pepsis/peer/cSession.C:72
+msgid "Number of scheduler threads."
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:63
+msgid "Number of supported streams."
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:64
+msgid "Transport to use (tcp,sctp)."
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:70
+msgid "<name>"
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:72
+msgid "<count>"
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:154
+msgid "Bad event backend:\t%1%"
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:196
+msgid "Bad transport type:\t%1%"
+msgstr ""
+
+#: src/pepsis/peer/cSession.C:203
+msgid "No servers defined"
+msgstr ""
+
+#: src/pepsis/peer/cTcpChannel.C:94 src/pepsis/peer/cTcpNode.C:151
+#: src/pepsis/peer/cTcpServer.C:128
+msgid "event error:\t'%1%'."
+msgstr ""
+
+#: src/pepsis/peer/cTcpChannel.C:144
+msgid "read error:\t'%1%'."
+msgstr ""
+
+#: src/pepsis/peer/cTcpChannel.C:185
+msgid "read error:\tstream %1% is not active."
+msgstr ""
+
+#: src/pepsis/peer/cTcpNode.C:84 src/pepsis/peer/cTcpNode.C:228
+#: src/pepsis/peer/cTcpServer.C:71 src/pepsis/peer/cTcpServer.C:102
+msgid "Could not get address information for '%1%:%2%'."
+msgstr ""
+
+#: src/pepsis/peer/cTcpNode.C:115
+msgid "Could bind to '%1%:%2%'."
+msgstr ""
+
+#: src/pepsis/peer/cTcpNode.C:166 src/pepsis/peer/cTcpServer.C:143
+msgid "accept():\t'%1%'."
+msgstr ""
+
+#: src/pepsis/peer/cTcpNode.C:258
+msgid "Could not connect to '%1%:%2%'."
+msgstr ""
+
+#: src/pepsis/peer/cTcpClient.C:60 src/pepsis/peer/cTcpClient.C:90
+msgid "Could not get address information for '%1%'."
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:526
+msgid "Could not open:\t%1%"
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:744
+msgid "\tSwitch conflict on:\t%1%"
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:757
+msgid "\tAlias conflict on:\t%1%"
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:763
+msgid "\tNo alias target:\t%1%"
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:796
+msgid "\tUnknown switch:\t%1%"
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:823
+msgid "Version "
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:829
+msgid "Build "
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:873
+msgid "Required switches:"
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:883
+msgid "Optional switches:"
+msgstr ""
+
+#: src/pepsis/lib/pEnv.C:893
+msgid "Informational switches:"
+msgstr ""
+
+#: src/pepsis/lib/pMessage.C:43
+msgid "ERROR:\t"
+msgstr ""
+
+#: src/pepsis/lib/pMessage.C:44
+msgid "WARN:\t"
+msgstr ""
+
+#: src/pepsis/lib/pMessage.C:45
+msgid "INFO:\t"
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:115
+msgid "Display build number."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:116
+msgid "Path to the configuration file."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:117
+msgid "Enable debugging (true|false)."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:118
+msgid "Path to the configuration dump file."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:119
+msgid "Print a help listing if true."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:120
+msgid "Log file."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:121
+msgid "Print the program's version if true."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:129
+msgid "Print build number on standard output."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:131 src/pepsis/lib/pSession.C:135
+#: src/pepsis/lib/pSession.C:139
+msgid "<file>"
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:131
+msgid "Define the configuration file path."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:133
+msgid "Enable debugging, it uses the logging file."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:135
+msgid "Dump configuration state to a file."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:137
+msgid "Display this help output."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:139
+msgid "Log file (default is standard error)."
+msgstr ""
+
+#: src/pepsis/lib/pSession.C:141
+msgid "Display the program version"
+msgstr ""
+
+#: src/pepsis/lib/pShareable.C:17
+msgid "Bad exclusive lock"
+msgstr ""
+
+#: src/pepsis/lib/pShareable.C:18
+msgid "Bad shared lock"
+msgstr ""
+
+#: src/pepsis/lib/pShareable.C:19
+msgid "Releasing an unlocked node"
+msgstr ""
+
+#: src/pepsis/lib/pSpace.C:18
+msgid "Missing exclusive lock on object attachment"
+msgstr ""
+
+#: src/pepsis/lib/pStream.C:331
+msgid "Failed file open:\t%1%"
+msgstr ""
+
+#: src/pepsis/lib/pRandom.C:36
+msgid "Can not access '/dev/urandom'"
+msgstr ""
+
+#: src/pepsis/fuse/fDirFuse.C:48
+msgid "Projection source is already defined as '%1%'"
+msgstr ""
+
+#: src/pepsis/fuse/fSession.C:31
+msgid "Run FUSE mount in foreground (true|false)."
+msgstr ""
+
+#: src/pepsis/fuse/fSession.C:32 src/pepsis/fuse/fSession.C:42
+msgid "Volume mount point."
+msgstr ""
+
+#: src/pepsis/fuse/fSession.C:33 src/pepsis/fuse/fSession.C:44
+msgid "Allow non-user to access the volume."
+msgstr ""
+
+#: src/pepsis/fuse/fSession.C:34
+msgid "Run FUSE mount single threaded (true|false)."
+msgstr ""
+
+#: src/pepsis/fuse/fSession.C:40
+msgid "Run in foreground."
+msgstr ""
+
+#: src/pepsis/fuse/fSession.C:42
+msgid "<path>"
+msgstr ""
+
+#: src/pepsis/fuse/fSession.C:46
+msgid "Run single threaded."
+msgstr ""
+
+#: src/pepsis/fuse/fVolume.C:99
+msgid "Can not create the subspace:\t%1%"
+msgstr ""
+
+#: src/pepsis/fuse/fVolume.C:143
+msgid "No subspace for '%1%'"
+msgstr ""
+
+#: src/pm/Main.C:52 src/pm/Main.C:59
+msgid "Run PM single threaded."
+msgstr ""

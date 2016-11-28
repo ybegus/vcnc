@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+NODE_VERSION=v6.6.0
+
+#
+#  Locate ourselves.
+#
+VELSTOR_VCNCWEB_DIR="$(dirname "$(readlink -f "$0")")/.."
+#
+#  Check our node installation
+#
+NVM_DIR=$VELSTOR_VCNCWEB_DIR/share/vcnc-web/nvm
+#  .. Does nvm exist?
+if [ ! -d "$NVM_DIR" ]; then
+  echo "vcnc-web: $NVM_DIR missing. Exiting.";  exit 1
+fi
+#
+#  Sanity spot-check our installation
+#
+SERVER_DIR="$VELSTOR_VCNCWEB_DIR/share/vcnc-web"
+if [ ! -d $SERVER_DIR/node_modules ]; then 
+  echo "vcnc-web: $SERVER_DIR/node_modules doesn't exist. Exiting."; exit 6
+fi
+if [ ! -d $SERVER_DIR/dist ]; then 
+  echo "vcnc-web: $SERVER_DIR/dist doesn't exist. Exiting."; exit 6
+fi
+SERVER_JS="$SERVER_DIR/tools/distServer.js"
+if [ ! -s $SERVER_JS ]; then 
+  echo "vcnc-web: $SERVER_JS empty or doesn't exist. Exiting."; exit 7
+fi
+#
+#  Did we correctly locate npm?
+#
+NPM_EXE="$NVM_DIR/versions/node/$NODE_VERSION/bin/npm"
+if [ ! -x $NPM_EXE ]; then
+  echo "vcnc-web: $NPM_EXE not found or not executable. Exiting."; exit 8
+fi
+#
+#  Start the server
+#
+(
+  cd $SERVER_DIR
+  source $NVM_DIR/nvm.sh
+  nvm use $NODE_VERSION
+  $NPM_EXE run open:dist
+)
+
+
+
+
+
+
+
+

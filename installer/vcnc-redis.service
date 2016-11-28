@@ -1,0 +1,20 @@
+;
+;  Copyright (c) IC Manage, Inc.  All rights reserved.
+;
+;  See also http://www.freedesktop.org/software/systemd/man/systemd.unit.html
+;
+[Unit]
+Description=Redis for VelStor vCNC
+
+[Service]
+Type=simple
+ExecStart=/opt/velstor-vcnc/bin/redis-server /opt/velstor-vcnc/share/vcnc/server/config/vcnc-redis.conf --daemonize no
+Restart=always
+StandardOutput=syslog+console
+StandardError=syslog+console
+SyslogIdentifier=vcnc-redis
+User=root
+Group=root
+
+[Install]
+WantedBy=remote-fs.target

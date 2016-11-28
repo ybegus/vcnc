@@ -1,0 +1,14 @@
+---
+  extends: "airbnb"
+  globals:
+    before: false
+    beforeEach: false
+    console: false
+    describe: false
+    expect: false
+    it: false
+    require: false
+  rules:
+    # Chai expections is incompatible with 'use strict', and const/let
+    # requires 'use strict'.
+    no-var: "off"

@@ -1,0 +1,26 @@
+{
+  "name": "rest-api-tester",
+  "version": "1.0.0",
+  "description": "End to end test of the vCNC REST API",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "chakram": "^1.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "test": "mocha test/first.js"
+  },
+  "standard": {
+    "globals": [
+      "it",
+      "describe",
+      "before",
+      "beforeEach"
+    ]
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,1415 @@
+#
+#  Copyright (C) 2015 IC Manage Inc.
+#
+#  See the file 'COPYING' for license information.
+#
+swagger: '2.0'
+
+# Document metadata
+info:
+  version: "1.0.0"
+  title: Velstor vCNC API
+  description: |
+    ### Admin API
+    <p/>
+    The Admin API manages the vCNC server itself.
+
+    ### vTRQ API
+    <p/>
+    The vTRQ API performs operations on a vTRQ.
+
+    Errors are reported at two levels: HTTP and operational.  With one exception, HTTP error codes represent the success or failure of the HTTP protocol, considered solely as a transport. Operational error codes, reported in the response body, reflect the success or failure of the operation itself.
+
+    The exception is the operational error code __ENOENT__ (Does not exist).  REST operations which refer to exactly one resource in the URL convert __ENOENT__ to HTTP 404.  Doing so improves our compliance with [*HTTP/1.1*](http://tools.ietf.org/html/rfc7231).  Refer to the [vCNC API Overview](../api-overview.html) for a more detailed discussion.
+
+    vTRQ operational codes are returned to the REST interface as strings.
+
+    Error | Description |
+    --- | --- |
+    __OK__ | Operation was successful.
+    __EACCES__ | vCNC user does not have permission to perform operation on vTRQ.
+    __EEXIST__ | Destination path exists and is a directory, or it is a file and the value of _overwrite_ is _false_.
+    __ENOENT__ | Path does not exist. In most cases, reported as HTTP error 404.
+    __ENOTDIR__ | Path is not a directory.
+    __ENOTRECOVERABLE__ | vTRQ unable to make data safe; vTRQ is now in an unknown state.  Check the vTRQ logs for details.
+    __EREMOTEIO__ | An unspecified communication error occurred.
+
+    These error codes follow [IEEE Std 1003.1, 2013 Edition](http://pubs.opengroup.org/onlinepubs/9699919799/).
+
+# Generic host; our customers deploy this service.
+# In production, comment out this line.  The correct host will be displayed
+# when the deployed vCNC server hosts this document set.
+#host: api.acme.com
+
+# Array of all schemes the API supports.
+schemes:
+  - http
+
+# will be prefixed to all paths
+basePath: /v1
+
+# API request and response bodies are always JSON
+consumes:
+  - application/json
+produces:
+  - application/json
+
+#
+#  Endpoint definitions
+#
+paths:
+  ##
+  ##  Authorization and session security
+  ##
+  /auth/token:
+    post:
+      summary: Returns a session authorization token
+      operationId: login
+      tags:
+        - "Admin API"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: "User's name and password on the vCNC server."
+          required: true
+          schema:
+            $ref: '#/definitions/UsernamePassword'
+      responses:
+        '200':
+          description: Session token
+          schema:
+            $ref: '#/definitions/SessionToken'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    delete:
+      summary: Ends a user session
+      operationId: logout
+      tags:
+        - "Admin API"
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.  See response body.
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  ##
+  ##  vCNC - vtrq
+  ##
+  /vcnc/vtrqs:
+    post:
+      summary: Creates a new vTRQ resource and assigns the vTRQ ID.
+      operationId: vcncVtrqCreate
+      tags:
+        - "Admin API"
+      parameters:
+        - in: body
+          name: body
+          description: "Information about a host machine."
+          required: true
+          schema:
+            $ref: '#/definitions/Host'
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.  See response body.
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vcnc/vtrqs/{vtrq_id}:
+    put:
+      summary: Updates a vTRQ entry.
+      operationId: vcncVtrqUpdate
+      tags:
+        - "Admin API"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of vTRQ
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: "Information about a host machine."
+          required: true
+          schema:
+            $ref: '#/definitions/Host'
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.  See response body.
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    get:
+      summary: Retrieves data associated with a vTRQ.
+      operationId: vcncVtrqGet
+      tags:
+        - "Admin API"
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of vTRQ
+          required: true
+          type: integer
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.  See response body.
+          schema:
+            $ref: '#/definitions/Host'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Deletes a vTRQ entry.
+      operationId: vcncVtrqDelete
+      tags:
+        - "Admin API"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of vTRQ
+          required: true
+          type: integer
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.  See response body.
+        '400':
+          description: Ill-formed or invalid request.
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  ##
+  ##  vCNC - users
+  ##
+  /vcnc/users:
+    post:
+      summary: Creates a new vCNC user and assigns the initial password
+      operationId: vcncUserCreate
+      tags:
+        - "Admin API"
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: "User's new password on the vCNC server."
+          required: true
+          schema:
+            $ref: '#/definitions/UsernamePassword'
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.  See response body.
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vcnc/users/{username}:
+    put:
+      summary: Updates information about a vCNC user.
+      operationId: vcncUserUpdate
+      tags:
+        - "Admin API"
+      parameters:
+        - in: path
+          name: username
+          description: Name of user.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: "User's new password on the vCNC server."
+          required: true
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+            required:
+              - password
+            additionalProperties: false
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+
+    delete:
+      summary: Deletes a vCNC user
+      operationId: vcncUserDelete
+      tags:
+        - "Admin API"
+      parameters:
+        - in: path
+          name: username
+          description: Name of user to be deleted.
+          required: true
+          type: string
+        - in: header
+          name: "Authorization"
+          description: JWT session token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  ##
+  ##  vTRQ
+  ##
+  /vtrq/delete_nodes/{vtrq_id}:
+    post:
+      summary: Performs a vector of deletions in a vTRQ namespace
+      tags:
+        - "vTRQ Namespace"
+      operationId: vtrqDeleteNodes
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: query
+          name: recursive
+          required: false
+          type: boolean
+          default: false
+        - in: body
+          name: body
+          description: "Array of deletion requests."
+          required: true
+          schema:
+            $ref: '#/definitions/DeleteNodesRequest'
+      responses:
+        '200':
+          description: Request processed, see response body.
+          schema:
+            $ref: '#/definitions/DeleteNodesResponse'
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/meta_copy/{vtrq_id}:
+    post:
+      summary: Performs a vector of meta-data copies
+      description: |
+        Performs internal "meta-data" copies of one part of the vTRQ namespace to another.
+
+        If the source path is a directory and the destination path exists, the copy is not performed and the error code is set to __EEXIST__.
+
+        If the source path is a file and the destination path is an existing directory, the copy is not performed and the error code is set to __EEXIST__.
+
+        When both the source path and destination path are existing files, the behavior depends on the value of "overwrite". If true, the file at the destination path is atomically changed to be the file at the source path. Otherwise, the copy is not performed and the error code is set to __EEXIST__.
+
+        Metadata copies are performed on the server in no particular order. The return JSON object pairs each metacopy request with its resulting error code. The array is in no particular order; specifically, it may or may not be in the order it was executed on the vTRQ.
+
+      tags:
+        - "vTRQ Namespace"
+      operationId: vtrqMetaCopy
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: query
+          name: overwrite
+          required: false
+          type: boolean
+          default: false
+        - in: body
+          name: body
+          description: "Array of meta-copy requests."
+          required: true
+          schema:
+            $ref: '#/definitions/MetaCopyRequest'
+      responses:
+        '200':
+          description: Request processed, see response body.
+          schema:
+            $ref: '#/definitions/MetaCopyResponse'
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+
+  /vtrq/namespace/{vtrq_id}/{url_path}:
+    delete:
+      summary: Deletes the node at the specified paath.
+      operationId: vtrqNamespaceDelete
+      tags:
+        - "vTRQ Namespace"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded path in the vTRQ namespace.
+          required: true
+          type: string
+          format: url-path
+        - in: query
+          name: recursive
+          required: false
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Request processed.  See response body.
+          schema:
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - EREMOTEIO
+            required:
+              - error_sym
+            additionalProperties: false
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    get:
+      summary: Returns meta-data about the specified path
+      description: "The returned content resembles that of 'struct stat' on Unix systems."
+
+      operationId: vtrqNamespaceGet
+      tags:
+        - "vTRQ Namespace"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded path in the vTRQ namespace.
+          required: true
+          type: string
+          format: url-path
+      responses:
+        '200':
+          description: Request processed.  See response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - EREMOTEIO
+              stat:
+                $ref: '#/definitions/StructStat'
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/namespace/{vtrq_id}/{url_path}/children:
+    get:
+      summary: Returns the child nodes of a namespace path
+      operationId: vtrqNamespaceChildren
+      tags:
+        - "vTRQ Namespace"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded path in the vTRQ namespace.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed.  See response body.
+          schema:
+            type: object
+            required:
+              - error_sym
+              - result
+            properties:
+              error_sym:
+                type: string
+                default: OK
+              result:
+                type: array
+                items:
+                  type: string
+            additionalProperties: false
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/namespace/{vtrq_id}/{url_path}/consistency:
+    get:
+      summary: Retreives the consistency attribute of a vTRQ node.
+      operationId: vtrqNamespaceConsistencyGet
+      tags:
+        - "vTRQ Namespace"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded path in the vTRQ namespace.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed. See response body.
+          schema:
+            required:
+              - error_sym
+              - consistency
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - ENOENT
+                  - ENOTDIR
+                  - ENAMETOOLONG
+                  - EEXIST
+                  - ENOSPC
+                  - EREMOTEIO
+              consistency:
+                $ref: '#/definitions/Consistency'
+            additionalProperties: false
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    post:
+      summary: Sets the consistency attribute of a vTRQ node.
+      operationId: vtrqNamespaceConsistencySet
+      tags:
+        - "vTRQ Namespace"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded path in the vTRQ namespace.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: "Additional parameters"
+          required: true
+          schema:
+            type: object
+            properties:
+              consistency:
+                $ref: '#/definitions/Consistency'
+            required:
+              - consistency
+            additionalProperties: false
+      responses:
+        '200':
+          description: Request processed. See response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - ENOENT
+                  - ENOTDIR
+                  - ENAMETOOLONG
+                  - EEXIST
+                  - ENOSPC
+                  - EREMOTEIO
+            additionalProperties: false
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/namespace/{vtrq_id}/{url_path}/mkdir:
+    post:
+      summary: Creates a directory at a namespace path.
+      description: Clients must ensure the parent exists and is a directory.
+      operationId: vtrqNamespaceMkdir
+      tags:
+        - "vTRQ Namespace"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded path in the vTRQ namespace.
+          required: true
+          type: string
+        - in: query
+          name: mode
+          description: "File access bits (decimal)"
+          required: false
+          type: integer
+          format: int32
+          default: 429
+        - in: query
+          name: parents
+          description: When 'true', creates parent directories as necessary.
+          required: false
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Request processed. See response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - ENOENT
+                  - ENOTDIR
+                  - ENAMETOOLONG
+                  - EEXIST
+                  - ENOSPC
+                  - EREMOTEIO
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+
+  /vtrq/service/{vtrq_id}:
+    delete:
+      summary: Gracefully brings down a vTRQ
+      operationId: vtrqShutdown
+      tags:
+        - "vTRQ Services"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+      responses:
+      #  '200':
+      #    description: Request processed.  See response body.
+      #    schema:
+      #      properties:
+      #        error_sym:
+      #          type: string
+      #          description: Symbolic error code value
+      #          default: OK
+      #          enum:
+      #            - EACCES
+      #            - EREMOTEIO
+      #      required:
+      #        - error_sym
+      #      additionalProperties: false
+        '202':
+          description: Request accepted. Client may receive the HTTP response before the vTRQ has fully shut down.
+          schema:
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+            required:
+              - error_sym
+            additionalProperties: false
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/vp/{vtrq_id}/{vp_id}:
+    get:
+      summary: Returns information about a VP instance
+      operationId: vpGet
+      tags:
+        - "VP Instances"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: vp_id
+          description: VP instance ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed. See response body.
+          schema:
+            required:
+              - error_sym
+              - gid
+              - mount_point
+              - uid
+              - user
+              - workspace
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - EREMOTEIO
+              gid:
+                type: integer
+                description: Group ID of VP process.
+                example: 101
+              mount_point:
+                type: string
+                description: "Fully qualified path to the VP's mount point."
+                example: "/path/to/mount/point"
+              uid:
+                type: integer
+                description: User ID of VP process.
+                example: 101
+              user:
+                type: string
+                description: PeerCache hierarchical user name.
+                example: /marketing/sally
+              workspace:
+                type: string
+                description: Name of the PeerCache workspace.
+                example: /some/workspace/name
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    delete:
+      summary: Disconnects a VP instance from all servers.
+      operationId: vpDelete
+      tags:
+        - "VP Instances"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: vp_id
+          description: VP instance ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed. See response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - EREMOTEIO
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/vp/{vtrq_id}:
+    get:
+      summary: Finds VP instances matching certain criteria
+      description: |
+        The result body contains the id of every VP which matches all (logical AND) of the search parameters. Matching is based on simple string equality.
+
+        If the request body contains no parameters, every VP id is returned.
+
+      operationId: vpFind
+      tags:
+        - "VP Instances"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: query
+          name: vp_host
+          description: Hostname of the machine running the VP
+          required: false
+          type: string
+        - in: query
+          name: mount_point
+          description: Fully qualified canonical path to the VP mount point.
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Request processed, see response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - EREMOTEIO
+              vp_ids:
+                type: array
+                description: ""
+                items:
+                  type: string
+                  example: "0x123456789ABCDEF0"
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/workspaces/{vtrq_id}/{url_path}:
+    put:
+      summary: Updates a workspace
+      operationId: vtrqWorkspaceUpdate
+      tags:
+        - "vTRQ Workspaces"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded hierarchial name of the workspace.
+          required: true
+          type: string
+        - in: query
+          name: push
+          description: "'true' if active VPs should switch to the new spec."
+          required: false
+          type: boolean
+          default: false
+        - in: body
+          name: body
+          description: "Workspace Specification"
+          required: true
+          schema:
+            type: object
+            required:
+              - spec
+            properties:
+              spec:
+                $ref: '#/definitions/WorkspaceSpec'
+            additionalProperties: false
+      responses:
+        '200':
+          description: Request processed. See response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - EREMOTEIO
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Deletes a workspace
+      operationId: vtrqWorkspaceDelete
+      tags:
+        - "vTRQ Workspaces"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded hierarchial name of the workspace.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed, see response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCES
+                  - ENOENT
+                  - EREMOTEIO
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    get:
+      summary: Returns a workspace specification
+      operationId: vtrqWorkspaceGet
+      tags:
+        - "vTRQ Workspaces"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded hierarchial name of the workspace.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed, see response body.
+          schema:
+            type: object
+            required:
+              - error_sym
+              - spec
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCES
+                  - ENOENT
+                  - EREMOTEIO
+              spec:
+                $ref: '#/definitions/WorkspaceSpec'
+            additionalProperties: false
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/workspaces/{vtrq_id}/{url_path}/children:
+    get:
+      summary: Returns child nodes of a workspace path
+      description: |
+        Workspaces are organized into a hierarchical namespace.  This method returns a
+        JSON array containing every workspace name which is a child of the specified
+        path.
+
+      operationId: vtrqWorkspaceChildren
+      tags:
+        - "vTRQ Workspaces"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: path
+          name: url_path
+          description: URL-encoded hierarchial name of the workspace.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Request processed, see response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCES
+                  - ENOENT
+                  - EREMOTEIO
+              children:
+                type: array
+                items:
+                  type: string
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /vtrq/workspaces/{vtrq_id}:
+    post:
+      summary: Creates or updates a workspace
+      operationId: vtrqWorkspaceCreate
+      tags:
+        - "vTRQ Workspaces"
+      parameters:
+        - in: path
+          name: vtrq_id
+          description: ID of the vTRQ performing this operation.
+          required: true
+          type: integer
+        - in: query
+          name: overwrite
+          description: "'true' if an existing workspace should be overwritten."
+          required: false
+          type: boolean
+          default: false
+        - in: query
+          name: push
+          description: "'true' if active VPs should switch to the new spec."
+          required: false
+          type: boolean
+          default: false
+        - in: body
+          name: body
+          description: "Workspace Specification"
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: workspace_a
+              spec:
+                $ref: '#/definitions/WorkspaceSpec'
+            required:
+              - name
+              - spec
+            additionalProperties: false
+      responses:
+        '200':
+          description: Request processed. See response body.
+          schema:
+            required:
+              - error_sym
+            properties:
+              error_sym:
+                type: string
+                description: Symbolic error code value
+                default: OK
+                enum:
+                  - OK
+                  - EACCESS
+                  - EREMOTEIO
+        default:
+          description: HTTP error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /_test/moxiate:
+    post:
+      summary: Tests 202 fulfillment mechanism
+      operationId: _testFulfill
+      tags:
+        - "Tests"
+      parameters:
+        - in: query
+          name: latency
+          description: Number of seconds needed to fulfill
+          required: true
+          type: integer
+        - in: query
+          name: input
+          description: Integer input value
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Completed
+
+#summary
+#  Re-usuable object definitions.
+#
+definitions:
+
+  Consistency:
+    type: string
+    description: Consistency semantics
+    default: eventual
+    enum:
+      - eventual
+      - immediate
+
+
+  ErrorModel:
+    required:
+      - error_sym
+      - message
+    properties:
+      error_sym:
+        type: string
+      message:
+        type: string
+
+  SessionToken:
+    properties:
+      token:
+        type: string
+
+  PSpaceNode:
+    type: object
+    properties:
+      N:
+        type: string
+      C:
+        type: array
+        minItems: 0
+        items:
+          $ref: '#/definitions/PSpaceNode'
+    required:
+      - N
+    additionalProperties: false
+
+  PSpace:
+    type: object
+    properties:
+      P:
+        type: string
+      S:
+        $ref: '#/definitions/PSpaceNode'
+    required:
+      - P
+      - S
+    additionalProperties: false
+
+  Host:
+    type: object
+    properties:
+      hname:
+        type: string
+      vtrq_id:
+        type: integer
+      port:
+        type: string
+      transport:
+        type: string
+        default: tcp
+        enum:
+          - tcp
+          - sctp
+    required:
+      - hname
+      - vtrq_id
+      - port
+      - transport
+    additionalProperties: false
+
+  UsernamePassword:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+    required:
+      - username
+      - password
+    additionalProperties: false
+
+  SourceDestinationPath:
+    properties:
+      src:
+        type: string
+        example: "/path/to/source"
+      dest:
+        type: string
+        example: "/path/to/destination"
+    required:
+      - src
+      - dest
+    additionalProperties: false
+
+  SourceDestinationVector:
+    type: array
+    items:
+      $ref: '#/definitions/SourceDestinationPath'
+
+  SourceDestinationErrorVector:
+    type: array
+    items:
+      properties:
+        error_sym:
+          type: string
+          example: OK
+        copy:
+          $ref: '#/definitions/SourceDestinationPath'
+      required:
+        - error_sym
+        - copy
+      additionalProperties: false
+
+  MetaCopyRequest:
+    type: object
+    properties:
+      copy_paths:
+        $ref: '#/definitions/SourceDestinationVector'
+    required:
+      - copy_paths
+    additionalProperties: false
+
+  MetaCopyResponse:
+    type: object
+    properties:
+      result:
+        $ref: '#/definitions/SourceDestinationErrorVector'
+
+  DeleteNodesRequest:
+    type: object
+    properties:
+      delete_paths:
+        type: array
+        items:
+          type: string
+          example: /path/on/vtrq_host
+    required:
+      - delete_paths
+    additionalProperties: false
+
+  DeleteNodesResponse:
+    type: object
+    properties:
+      result:
+        type: array
+        items:
+          type: object
+          properties:
+            error_sym:
+              type: string
+              description: Symbolic error code value
+              default: OK
+              #  this enum needs more codes
+              enum:
+                - OK
+                - EACCESS
+                - EREMOTEIO
+            path:
+              type: string
+              example: /path/on/vtrq_host
+          required:
+            - error_sym
+            - path
+          additionalProperties: false
+
+  StructStat:
+    properties:
+      st_dev:
+        type: string
+        format: uint64
+        example: "0x0000000000000000"
+      st_ino:
+        type: string
+        format: uint64
+        example: "0x0000000000000000"
+      st_mode:
+        type: integer
+        format: int32
+        example: 544
+      st_nlink:
+        type: string
+        format: uint64
+        example: "0x0000000000000000"
+      st_uid:
+        type: integer
+        format: int32
+        example: 101
+      st_gid:
+        type: integer
+        format: int32
+        example: 102
+      st_rdev:
+        type: string
+        format: uint64
+        example: "0x0000000000000000"
+      st_size:
+        type: string
+        format: uint64
+        example: "0x0000000000000000"
+      st_blksize:
+        type: string
+        format: uint64
+        example: "0x0000000000000000"
+      st_blocks:
+        type: string
+        format: uint64
+        example: "0x0000000000000000"
+      st_atime:
+        type: string
+        format: date-time
+        example: "2015-09-10T11:32:50.522Z"
+      st_mtime:
+        type: string
+        format: date-time
+        example: "2015-09-10T11:32:50.522Z"
+      st_ctime:
+        type: string
+        format: date-time
+        example: "2015-09-10T11:32:50.522Z"
+    required:
+      - st_dev
+      - st_ino
+      - st_mode
+      - st_nlink
+      - st_uid
+      - st_gid
+      - st_rdev
+      - st_size
+      - st_blksize
+      - st_blocks
+      - st_atime
+      - st_mtime
+      - st_ctime
+    additionalProperties: false
+
+  WorkspaceEntry:
+    type: object
+    properties:
+      vp_path:
+        type: string
+        example: /
+      vtrq_id:
+        type: integer
+        example: 10
+      vtrq_path:
+        type: string
+        example: /path/within/vtrq10
+      local:
+        type: boolean
+        example: false
+    required:
+      - vp_path
+      - vtrq_id
+      - vtrq_path
+      - local
+    additionalProperties: false
+
+  WorkspaceSpec:
+    type: array
+    items:
+      $ref: '#/definitions/WorkspaceEntry'

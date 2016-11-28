@@ -1,0 +1,75 @@
+#
+#  Configuration for vcnc
+#
+server:
+  #
+  #  The port on which the server listens.  This value may be overridden by 
+  #  the VELSTOR_VCNC_PORT environment variable.
+  port: 6130
+  #
+  #  The network interface on which the server listens. If 'all', the server
+  #  listens on all interfaces. (Value is currently ignored; server listens on all
+  #  interfaces)
+  interface: all
+
+fulfill202:
+  #
+  #  The URL published in the 'Location' header, where the temporary fulfillment
+  #  resource is available.  The full 'Location' url is
+  #  `${baseUrl}${route}/${id}.  If unset, the baseUrl is set to
+  #  `http://${hostname}:${port}`
+  # baseUrl: http://localhost:5500
+  #
+  #  The endpoint relative to the baseUrl where the fulfillment controller
+  #  listens.
+  route: /_fulfill
+  #
+  #  The number of seconds, after the operation completes, that the results
+  #  of the operation remain available at the temporary url.
+  expires: 600
+  #
+  #  The number of seconds, once a request is received, after which the 202
+  #  response is issued.
+  response: 1
+
+redis:
+  #
+  #  Connection information for the Redis client.  See
+  #  https://github.com/luin/ioredis/blob/master/API.md#new_Redis.
+  #
+  #  The Redis server itself is configured separately.  The two configurations
+  #  must match where they intersect.
+  connection:
+    #
+    #  Port of the Redis server.  Redis default is 6379
+    port: 6379
+    #
+    #  Host of the Redis server.  Redis default is 'localhost'
+    host: localhost
+    #
+    #  When the Redis server is on the same machine as vCNC, the best performance
+    #  may be achieved by connection over a socket.
+    # path: /tmp/vcnc-redis.sock
+    #
+    #  Redis transparently prepends this prefix to every key.  Its purpose is to
+    #  avoid conflicts with other software, including another vcnc, which might
+    #  be using the same Redis instance.
+    keyPrefix: vcnc
+    #
+    #  An alternative way to isolate vcnc instances is by specifing a database 
+    #  number.  Valid values are between 0 and 15, inclusive.  Default is 0
+    db: 0
+    #
+test:
+  #
+  #  Introduces seconds of latency into the (apparent) response time of the vtrq.
+  #  Only for testing; production deployments should use value 0.
+  latency: 0
+
+web:
+  #
+  #  If true, statically serve the web-based admin console
+  enabled: true
+  #
+  #  Serve the console at this offset from server.port
+  offset: -10

@@ -1,0 +1,11 @@
+#
+#	Copyright (C)	2013	Roger March
+#
+rm -f @/po/POTFILES.in
+#
+DIRS="@/bench @/src @/test"
+for i in $DIRS
+do
+  find $i -name '*.C' -print | sed -e "s|^@/||" >> @/po/POTFILES.in
+done
+#
