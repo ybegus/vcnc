@@ -11,7 +11,13 @@
 .icmconfig
 
 # Build directories
-/build
+build/
+Build/
+
+#  Local exclusions (generated files)
+/vcnc-rest/api/swagger.json
+/vcnc-rest/static/doc-html/
+/vcnc-rest/static/swagger-ui/
 
 # Haskell
 *.hi
@@ -44,6 +50,7 @@ Makefile.in
 /install-sh
 /missing
 /stamp-h1
+*.in
 
 # https://www.gnu.org/software/libtool/
 

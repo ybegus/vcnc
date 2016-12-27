@@ -12,7 +12,6 @@
 #include <prtcl/core/pcSessionExport.H>
 #include <prtcl/cnctrq/cnctrqClient.H>
 #include <prtcl/cnctrq/cnctrqCncSession.H>
-#include <prtcl/cnctrq/cnctrqProtocolsClient.H>
 #include <sstream>
 
 //
