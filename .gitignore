@@ -13,6 +13,7 @@
 # Build directories
 build/
 Build/
+_build/
 
 #  Local exclusions (generated files)
 /vcnc-rest/api/swagger.json
