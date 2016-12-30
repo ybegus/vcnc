@@ -22,8 +22,9 @@ Build/
 # Haskell
 *.hi
 
-# Emacs
+# Emacs and vim
 *~
+\#*\#
 
 # http://www.gnu.org/software/automake
 
