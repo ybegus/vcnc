@@ -1,0 +1,6 @@
+{
+    "restructuredtext.confPath" : "documentation/conf.py",
+    "restructuredtext.builtDocumentationPath" : "documentation/_build/html",
+    "restructuredtext.updateOnTextChanged" : "true"
+}
+
