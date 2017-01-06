@@ -15,6 +15,9 @@ build/
 Build/
 _build/
 
+# Python virtual environments
+venv*/
+
 #  Local exclusions (generated files)
 /vcnc-rest/api/swagger.json
 /vcnc-rest/static/doc-html/
