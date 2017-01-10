@@ -13,27 +13,39 @@ configuration and content.
 
 The code is open source, and `available on github`_.
 
-.. _available on github: http://github.com/rtfd/readthedocs.org
-
-The documentation is organized into several sections:
-
-* :ref:`about-vcnc`
-
-..
-..  * :ref:`user-docs`
-  * :ref:`developer-docs`
-  * :ref:`about-docs`
-
-.. _about-vcnc:
+.. _available on github: http://github.com/nicko7i/vcnc
 
 .. toctree::
    :maxdepth: 2
-   :caption: About the vvCNC
+   :caption: About the vCNC
 
-   about-vcnc
-   user-docs
-   developer-docs
-   about-docs
+   about-vcnc/vcnc-architecture
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User Information
+
+   user/getting-started
+   user/vcnc-clients
+   user/users-and-security
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Developer Information
+
+   developer/getting-started
+   developer/coding-policies
+   developer/workflow
+   developer/vcnc-rest
+   developer/vcnc-web
+   developer/vclc
+   developer/python-api
+   developer/design-notes
+   developer/about-this-document
+
+.. toctree::
+   :maxdepth: 2
+   :caption: About this Document
 
 Indices and tables
 ==================
