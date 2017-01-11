@@ -36,6 +36,7 @@ The code is open source, and `available on github`_.
    developer/getting-started
    developer/coding-policies
    developer/workflow
+   developer/installing-and-building
    developer/vcnc-rest
    developer/vcnc-web
    developer/vclc
