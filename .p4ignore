@@ -4,3 +4,5 @@ docs
 venv*
 _build
 _static
+swagger-ui
+*.gypi
