@@ -5,7 +5,13 @@
 #
 #	See the file 'COPYING' for license information.
 #
-SUBDIRS = addon static
+ACLOCAL_AMFLAGS = -I m4
+SUB_LOCAL = $(top_srcdir)/sub_local.pl
+
+SUBDIRS = src addon static . doc installer
+#
+PROJECTIONS = 			\
+	VERSION=$(VERSION)
 
 #
 #  On installation, place config/settings files into the 
@@ -17,13 +23,29 @@ SUBDIRS = addon static
 #etcdir=$(datadir)/etc
 #etc_DATA = velstor-vcnc.conf velstor-vcnc-settings.js
 
-all:
-	(cd $(top_srcdir)/vcnc-rest; \
+
+all-local:
+	(cd $(top_srcdir); \
 	  NVM_DIR=$(TOOLROOT)/nvm; \
 	  [ ! -d $(NVM_DIR) ] && (echo "Can't find NVM_DIR"; exit 1); \
 	  . $(NVM_DIR)/nvm.sh;  \
 	  npm install; \
 	  npm run json-ize )
 
+#
+#  Install an API spec editor which may be useful for development but is not
+#  needed for deployment
+#
+swagger-editor:
+	if [ ! -d swagger-editor ]; then \
+	  $(PROG_GIT) clone https://github.com/swagger-api/swagger-editor.git; \
+	fi
+#
+#
 clean-local:
-	echo TBD
+	rm -rf swagger-editor
+
+install-data-local:
+	find $(top_srcdir) -name '*~' -exec rm '{}' ';'
+	mkdir $(DESTDIR)$(prefix)/share/vcnc/vcnc-rest
+	rsync -a $(top_srcdir) $(DESTDIR)$(prefix)/share/vcnc/vcnc-rest
