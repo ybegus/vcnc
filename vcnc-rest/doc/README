@@ -1,0 +1,9 @@
+This directory contains all of the generated documentation for the vCNC
+server.  To view with a brower, navaigate to the 'index.hml' file.  Create
+a static website with:
+
+% cd /path/to/html
+% python3 -m http.server [port]
+
+When deployed, the vCNC node.js server will serve these files as a static 
+website. 

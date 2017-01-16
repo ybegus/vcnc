@@ -26,4 +26,4 @@ BUILT_SOURCES = $(MARKDOWN_HTML)
 CLEANFILES = $(MARKDOWN_HTML) markdown-products-proxy
 
 local-clean:
-	rm -rf $(top_srcdir)/vcnc-rest/static/doc-html
+	rm -rf $(top_srcdir)/static/doc-html
