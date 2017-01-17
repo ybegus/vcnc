@@ -86,7 +86,7 @@ paths:
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
     delete:
       summary: Ends a user session
       operationId: logout
@@ -106,7 +106,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   ##
   ##  vCNC - vtrq
@@ -135,7 +135,7 @@ paths:
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vcnc/vtrqs/{vtrq_id}:
     put:
@@ -166,7 +166,7 @@ paths:
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
     get:
       summary: Retrieves data associated with a vTRQ.
@@ -194,7 +194,7 @@ paths:
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
     delete:
       summary: Deletes a vTRQ entry.
@@ -218,11 +218,11 @@ paths:
         '400':
           description: Ill-formed or invalid request.
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   ##
   ##  vCNC - users
@@ -253,7 +253,7 @@ paths:
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vcnc/users/{username}:
     put:
@@ -290,7 +290,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
 
     delete:
@@ -315,7 +315,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   ##
   ##  vTRQ
@@ -355,7 +355,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/meta_copy/{vtrq_id}:
     post:
@@ -403,7 +403,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
 
   /vtrq/namespace/{vtrq_id}/{url_path}:
@@ -448,7 +448,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
     get:
       summary: Returns meta-data about the specified path
@@ -489,7 +489,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/namespace/{vtrq_id}/{url_path}/children:
     get:
@@ -508,6 +508,28 @@ paths:
           description: URL-encoded path in the vTRQ namespace.
           required: true
           type: string
+        - in: query
+          name: filter
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of items to retreive. Default is 1000; maximum is 100,000.
+          required: false
+          type: integer
+          default: 1000
+        - in: query
+          name: offset
+          description: Offset the list of returned results by this amount. Default is zero.
+          required: false
+          type: integer
+          default: 0
+        - in: query
+          name: details
+          description: If false the 'stat' field will not be returned.
+          required: false
+          type: boolean
+          default: false
       responses:
         '200':
           description: Request processed.  See response body.
@@ -528,7 +550,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/namespace/{vtrq_id}/{url_path}/consistency:
     get:
@@ -574,7 +596,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
     post:
       summary: Sets the consistency attribute of a vTRQ node.
@@ -628,7 +650,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/namespace/{vtrq_id}/{url_path}/mkdir:
     post:
@@ -684,7 +706,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
 
   /vtrq/service/{vtrq_id}:
@@ -730,7 +752,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/vp/{vtrq_id}/{vp_id}:
     get:
@@ -792,7 +814,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
     delete:
       summary: Disconnects a VP instance from all servers.
       operationId: vpDelete
@@ -827,7 +849,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/vp/{vtrq_id}:
     get:
@@ -856,6 +878,23 @@ paths:
           description: Fully qualified canonical path to the VP mount point.
           required: false
           type: string
+        - in: query
+          name: limit
+          description: Number of items to retreive. Default is 1000; maximum is 100,000.
+          required: false
+          type: integer
+          default: 1000
+        - in: query
+          name: offset
+          description: Offset the list of returned results by this amount. Default is zero.
+          required: false
+          type: integer
+          default: 0
+        - in: query
+          name: details
+          required: false
+          type: boolean
+          default: false
       responses:
         '200':
           description: Request processed, see response body.
@@ -880,7 +919,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/workspaces/{vtrq_id}/{url_path}:
     put:
@@ -935,7 +974,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
     delete:
       summary: Deletes a workspace
@@ -972,7 +1011,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
     get:
       summary: Returns a workspace specification
@@ -1014,7 +1053,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/workspaces/{vtrq_id}/{url_path}/children:
     get:
@@ -1038,6 +1077,27 @@ paths:
           description: URL-encoded hierarchial name of the workspace.
           required: true
           type: string
+        - in: query
+          name: filter
+          required: false
+          type: string
+        - in: query
+          name: limit
+          description: Number of items to retreive. Default is 1000; maximum is 100,000.
+          required: false
+          type: integer
+          default: 1000
+        - in: query
+          name: offset
+          description: Offset the list of returned results by this amount. Default is zero.
+          required: false
+          type: integer
+          default: 0
+        - in: query
+          name: details
+          required: false
+          type: boolean
+          default: false
       responses:
         '200':
           description: Request processed, see response body.
@@ -1057,11 +1117,11 @@ paths:
               children:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/definitions/Workspace'
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /vtrq/workspaces/{vtrq_id}:
     post:
@@ -1121,7 +1181,7 @@ paths:
         default:
           description: HTTP error
           schema:
-            $ref: '#/definitions/ErrorModel'
+            $ref: '#/definitions/Error'
 
   /_test/moxiate:
     post:
@@ -1158,7 +1218,7 @@ definitions:
       - immediate
 
 
-  ErrorModel:
+  Error:
     required:
       - error_sym
       - message
@@ -1413,3 +1473,12 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/WorkspaceEntry'
+
+  Workspace:
+    type: object
+    properties:
+      name:
+        type: string
+        example: my-workspace
+      spec:
+        $ref: '#/definitions/WorkspaceSpec'
