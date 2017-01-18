@@ -93,14 +93,14 @@ The build must be done under the Python virtual environment.
 
 .. code-block:: console
 
-  % cd *<project-dir>*
-  % . ./venv/bin/activate
+  % cd *project-root*
+  % source ./venv/bin/activate
   (venv) cd documentation
   (venv) make html
 
 Sphinx will generate a static HTML website in the documentation/_build
 directory.  It may be viewed at
-file:///*<project-dir>*/documentation/_build/html/index.html
+file:///*project-root*/documentation/_build/html/index.html
 
 Publishing this documentation
 '''''''''''''''''''''''''''''
@@ -114,7 +114,7 @@ the documentation as described above and then publish as follows:
 
 .. code-block:: console
 
-  % cd *<project-dir>*
+  % cd *project-root*
   % git checkout master
   % git pull
   % cd documentation
