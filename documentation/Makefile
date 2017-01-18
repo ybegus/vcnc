@@ -21,6 +21,7 @@ help:
 #  are done manually.  See the documentation.
 #
 publish:
+	make html
 	mkdir -p ../docs
 	rsync -a --delete _build/html/ ../docs
 

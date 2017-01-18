@@ -240,15 +240,15 @@ because node_gyp is hardwired to find its dependencies there.</p>
 <div class="section" id="building-this-documentation">
 <h3>Building this documentation<a class="headerlink" href="#building-this-documentation" title="Permalink to this headline">¶</a></h3>
 <p>The build must be done under the Python virtual environment.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">%</span> <span class="nb">cd</span> *&lt;project-dir&gt;*
-<span class="gp">%</span> . ./venv/bin/activate
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">%</span> <span class="nb">cd</span> *project-root*
+<span class="gp">%</span> <span class="nb">source</span> ./venv/bin/activate
 <span class="go">(venv) cd documentation</span>
 <span class="go">(venv) make html</span>
 </pre></div>
 </div>
 <p>Sphinx will generate a static HTML website in the documentation/_build
 directory.  It may be viewed at
-<a class="reference external" href="file:///">file:///</a><em>&lt;project-dir&gt;</em>/documentation/_build/html/index.html</p>
+<a class="reference external" href="file:///">file:///</a><em>project-root</em>/documentation/_build/html/index.html</p>
 </div>
 <div class="section" id="publishing-this-documentation">
 <h3>Publishing this documentation<a class="headerlink" href="#publishing-this-documentation" title="Permalink to this headline">¶</a></h3>
@@ -257,7 +257,7 @@ generated files into the /docs directory of the &#8216;master&#8217;
 branch of &#8216;vcnc&#8217;.</p>
 <p>After pushing the latest documentation sources to origin/master, build
 the documentation as described above and then publish as follows:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">%</span> <span class="nb">cd</span> *&lt;project-dir&gt;*
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">%</span> <span class="nb">cd</span> *project-root*
 <span class="gp">%</span> git checkout master
 <span class="gp">%</span> git pull
 <span class="gp">%</span> <span class="nb">cd</span> documentation
