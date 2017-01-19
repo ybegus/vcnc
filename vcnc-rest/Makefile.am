@@ -37,8 +37,8 @@ all-local:
 #  needed for deployment
 #
 swagger-editor:
-	if [ ! -d swagger-editor ]; then \
-	  $(PROG_GIT) clone https://github.com/swagger-api/swagger-editor.git; \
+	if [ ! -d $(top_srcdir)/swagger-editor ]; then \
+	  $(PROG_GIT) clone https://github.com/swagger-api/swagger-editor.git $(top_srcdir)/swagger-editor; \
 	fi
 #
 #
