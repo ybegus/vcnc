@@ -22,6 +22,7 @@ venv*/
 /vcnc-rest/api/swagger.json
 /vcnc-rest/static/doc-html/
 /vcnc-rest/static/swagger-ui/
+/vcnc-rest/swagger-editor/
 
 # Haskell
 *.hi
@@ -41,6 +42,7 @@ Makefile.in
 
 # http://www.gnu.org/software/autoconf
 
+aclocal.m4
 autom4te.cache
 autoscan.log
 autoscan-*.log

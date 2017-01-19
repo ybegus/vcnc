@@ -31,6 +31,13 @@ IC Manage Google Drive account.
 
 In the context of building vCNC, the PeerCache software is called the *TOOLROOT*.
 
+.. note::
+
+  In the installation document, /opt/frqu/TOOLROOT is a symbolic link to /opt/velstor/current.
+  An alternative is to use /opt/velstor/current at TOOLROOT.  The symbolic link 
+  may cause problems with NVM.  Using /opt/velstor/current causes problems with 
+  addon/binding.gyp.
+
 Configuring the Development Environment
 ---------------------------------------
 

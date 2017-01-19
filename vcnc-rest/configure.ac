@@ -9,6 +9,15 @@ AC_INIT(vCNC, 3.4.1, nick@icmanage.com)
 AC_PREFIX_DEFAULT(/opt/vcnc)
 #
 AM_CONFIG_HEADER(config.h)
+#
+#  ... Recent versions of autotools nag you to specify the subdir-objects
+#      option.  If you do, however, the build will fail because a foo.Po
+#      file was not found.  This despite my best efforts to take gettext
+#      out of the project.
+#
+#      Find out more at http://stackoverflow.com/questions/18839857/deps-po-no-such-file-or-directory-compiler-error
+#
+#AM_INIT_AUTOMAKE([subdir-objects])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AM_SILENT_RULES([no])
@@ -122,6 +131,12 @@ AM_CONDITIONAL(USE_GIT,[test "x$PROG_GIT" != "x"] && [test "$enable_gitrev" = "y
 #
 if test "x$PKG_CONFIG" = "x"; then
   PKG_CONFIG=$PROG_PKG_CONFIG
+fi
+#
+#	Ensure TOOLROOT is searched for packages
+#
+if test "x$PKG_CONFIG_PATH" = "x"; then
+  export PKG_CONFIG_PATH=$TOOLROOT/lib64/pkgconfig
 fi
 #
 #	Detect and use Pepsis.

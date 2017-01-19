@@ -189,6 +189,13 @@ development machine.</p>
 <p>Please refer to the <a class="reference external" href="https://docs.google.com/document/d/1ZiepQCDps2hb8Qi7k9BGE5yPtBrc6hfG7TXoUVFt5Tw/edit?usp=sharing">PeerCache installation document</a> maintained on the
 IC Manage Google Drive account.</p>
 <p>In the context of building vCNC, the PeerCache software is called the <em>TOOLROOT</em>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the installation document, /opt/frqu/TOOLROOT is a symbolic link to /opt/velstor/current.
+An alternative is to use /opt/velstor/current at TOOLROOT.  The symbolic link
+may cause problems with NVM.  Using /opt/velstor/current causes problems with
+addon/binding.gyp.</p>
+</div>
 </div>
 <div class="section" id="configuring-the-development-environment">
 <h2>Configuring the Development Environment<a class="headerlink" href="#configuring-the-development-environment" title="Permalink to this headline">¶</a></h2>

@@ -149,6 +149,9 @@ paths:
           description: ID of vTRQ
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: body
           name: body
           description: "Information about a host machine."
@@ -181,6 +184,9 @@ paths:
           description: ID of vTRQ
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: header
           name: "Authorization"
           description: JWT session token
@@ -207,6 +213,9 @@ paths:
           description: ID of vTRQ
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: header
           name: "Authorization"
           description: JWT session token
@@ -336,6 +345,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: query
           name: recursive
           required: false
@@ -384,6 +396,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: query
           name: overwrite
           required: false
@@ -418,6 +433,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: url_path
           description: URL-encoded path in the vTRQ namespace.
@@ -463,6 +481,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: url_path
           description: URL-encoded path in the vTRQ namespace.
@@ -503,6 +524,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: url_path
           description: URL-encoded path in the vTRQ namespace.
@@ -564,6 +588,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: url_path
           description: URL-encoded path in the vTRQ namespace.
@@ -609,6 +636,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: url_path
           description: URL-encoded path in the vTRQ namespace.
@@ -665,6 +695,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: url_path
           description: URL-encoded path in the vTRQ namespace.
@@ -721,6 +754,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
       responses:
       #  '200':
       #    description: Request processed.  See response body.
@@ -766,6 +802,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: vp_id
           description: VP instance ID
@@ -826,6 +865,9 @@ paths:
           description: ID of the vTRQ performing this operation.
           required: true
           type: integer
+          format: int64
+          minimum: 0
+          maximum: 1073741823
         - in: path
           name: vp_id
           description: VP instance ID
@@ -1217,6 +1259,42 @@ definitions:
       - eventual
       - immediate
 
+  DeleteNodesRequest:
+    type: object
+    properties:
+      delete_paths:
+        type: array
+        items:
+          type: string
+          example: /path/on/vtrq_host
+    required:
+      - delete_paths
+    additionalProperties: false
+
+  DeleteNodesResponse:
+    type: object
+    properties:
+      result:
+        type: array
+        items:
+          type: object
+          properties:
+            error_sym:
+              type: string
+              description: Symbolic error code value
+              default: OK
+              #  this enum needs more codes
+              enum:
+                - OK
+                - EACCESS
+                - EREMOTEIO
+            path:
+              type: string
+              example: /path/on/vtrq_host
+          required:
+            - error_sym
+            - path
+          additionalProperties: false
 
   Error:
     required:
@@ -1226,11 +1304,6 @@ definitions:
       error_sym:
         type: string
       message:
-        type: string
-
-  SessionToken:
-    properties:
-      token:
         type: string
 
   PSpaceNode:
@@ -1281,18 +1354,6 @@ definitions:
       - transport
     additionalProperties: false
 
-  UsernamePassword:
-    type: object
-    properties:
-      username:
-        type: string
-      password:
-        type: string
-    required:
-      - username
-      - password
-    additionalProperties: false
-
   SourceDestinationPath:
     properties:
       src:
@@ -1340,42 +1401,10 @@ definitions:
       result:
         $ref: '#/definitions/SourceDestinationErrorVector'
 
-  DeleteNodesRequest:
-    type: object
+  SessionToken:
     properties:
-      delete_paths:
-        type: array
-        items:
-          type: string
-          example: /path/on/vtrq_host
-    required:
-      - delete_paths
-    additionalProperties: false
-
-  DeleteNodesResponse:
-    type: object
-    properties:
-      result:
-        type: array
-        items:
-          type: object
-          properties:
-            error_sym:
-              type: string
-              description: Symbolic error code value
-              default: OK
-              #  this enum needs more codes
-              enum:
-                - OK
-                - EACCESS
-                - EREMOTEIO
-            path:
-              type: string
-              example: /path/on/vtrq_host
-          required:
-            - error_sym
-            - path
-          additionalProperties: false
+      token:
+        type: string
 
   StructStat:
     properties:
@@ -1447,6 +1476,18 @@ definitions:
       - st_ctime
     additionalProperties: false
 
+  UsernamePassword:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+    required:
+      - username
+      - password
+    additionalProperties: false
+
   WorkspaceEntry:
     type: object
     properties:
@@ -1455,6 +1496,9 @@ definitions:
         example: /
       vtrq_id:
         type: integer
+        format: int64
+        minimum: 0
+        maximum: 1073741823
         example: 10
       vtrq_path:
         type: string
